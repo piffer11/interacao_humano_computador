@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulário</title>
+    <style>
+        .form-box {
+            border: 1px solid #000;
+            padding: 10px;
+            margin: 20px 0;
+        }
+        .form-title {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Formulario</h1>
+    <form>
+        <div class="form-box">
+            <p class="form-title">Dados Pessoais</p>
+            Nome: <input type="text" name="nome"><br>
+            Endereço: <input type="text" name="endereco"><br>
+            Cidade: <input type="text" name="cidade"><br>
+            Estado:
+            <select name="estado">
+                <option value="sp">São Paulo</option>
+                <option value="rj">Rio de Janeiro</option>
+                <option value="df">Distrito-Federak</option>
+            </select>
+        </div>
+        <div class="form-box">
+            <p class="form-title">Natureza de Cargo</p>
+            <input type="radio" name="cargo" value="gerencia"> Gerência
+            <input type="radio" name="cargo" value="financeiro"> Financeiro
+            <input type="radio" name="cargo" value="recepcao"> Recepção
+            <input type="radio" name="cargo" value="administrativo"> Administrativo
+            <input type="radio" name="cargo" value="juridico"> Jurídico
+        </div>
+        <div class="form-box">
+            <p class="form-title">Área de Interesse</p>
+            <input type="checkbox" name="interesse" value="computacao"> Computação
+            <input type="checkbox" name="interesse" value="biologia"> Biologia
+            <input type="checkbox" name="interesse" value="meio_ambiente"> Meio Ambiente<
+            <input type="checkbox" name="interesse" value="engenharia"> Engenharia
+            <input type="checkbox" name="interesse" value="historia"> História
+        </div>
+        <div class="form-box">
+            <label for="text">Mini-Currículo:</label>
+            <textarea name="curriculo" rows="4" cols="50"></textarea>
+            
+        </div>
+        <input type="submit" value="Enviar">
+        <input type="reset" value="Limpar">
+    </form>
+</body>
+</html>
