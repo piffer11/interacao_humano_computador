@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+        }
+        .form-container {
+            max-width: 500px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+        .form-group button:hover {
+            background-color: #4cae4c;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Formulário</h2>
+        <form>
+            <h3>Dados Pessoais</h3>
+            <div class="form-group">
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div class="form-group">
+                <label for="cpf">CPF:</label>
+                <input type="text" id="cpf" name="cpf" required>
+                <span id="cpfValidationMessage"></span>
+            </div>
+            <div class="form-group">
+                <label for="cnpj">CNPJ:</label>
+                <input type="text" id="cnpj" name="cnpj" required>
+                <span id="cnpjValidationMessage"></span>
+            </div>
+            <div class="form-group">
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" required>
+            </div>
+            <div class="form-group">
+                <label for="cidade">Cidade:</label>
+                <input type="text" id="cidade" name="cidade" required>
+            </div>
+            <div class="form-group">
+                <label for="estado">Estado:</label>
+                <input type="text" id="estado" name="estado" required>
+            </div>
+            <h3>Dados Profissionais</h3>
+            <div class="form-group">
+                <label for="cargo">Natureza do Cargo:</label>
+                <select id="cargo" name="cargo" required>
+                    <option value="selecione uma opção">Selecione uma opção...</option>
+                    <option value="gerencia">Gerência</option>
+                    <option value="financeiro">Financeiro</option>
+                    <option value="recepcao">Recepção</option>
+                    <option value="administrativo">Administrativo</option>
+                    <option value="juridico">Jurídico</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="interesse">Área de Interesse:</label>
+                <select id="interesse" name="interesse" required>
+                    <option value="Selecione uma opção">Selecione uma opção...</option>
+                    <option value="computacao">Computação</option>
+                    <option value="biologia">Biologia</option>
+                    <option value="meio ambiente">Meio Ambiente</option>
+                    <option value="engenharia">Engenharia</option>
+                    <option value="historia">História</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Data e Hora Atuais:</label>
+                <input type="text" id="dataHoraAtual" readonly>
+            </div>
+            <div class="form-group">
+                <label for="valor">Valor:</label>
+                <input type="number" id="valor" name="valor" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <button type="submit">Enviar</button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function getCurrentDateTime() {
+            return new Date().toLocaleString();
+        }
+        
+        function validateCPF(cpf) {
+            cpf = cpf.replace(/\D/g, '');
+
+            if (cpf.length !== 11) {
+                return false;
+            }
+
+            if (/^(\d)\1{10}$/.test(cpf)) {
+                return false;
+            }
+
+            let sum = 0;
+            for (let i = 0; i < 9; i++) {
+                sum += parseInt(cpf.charAt(i)) * (10 - i);
+            }
+            let remainder = 11 - (sum % 11);
+            let digit = (remainder >= 10) ? 0 : remainder;
+
+            if (digit !== parseInt(cpf.charAt(9))) {
+                return false;
+            }
+
+            sum = 0;
+            for (let i = 0; i < 10; i++) {
+                sum += parseInt(cpf.charAt(i)) * (11 - i);
+            }
+            remainder = 11 - (sum % 11);
+            digit = (remainder >= 10) ? 0 : remainder;
+
+            if (digit !== parseInt(cpf.charAt(10))) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateCNPJ(cnpj) {
+            cnpj = cnpj.replace(/\D/g, '');
+
+            if (cnpj.length !== 14 || /^(\d)\1{13}$/.test(cnpj)) {
+                return false;
+            }
+
+            let size = cnpj.length - 2;
+            let numbers = cnpj.substring(0, size);
+            const digits = cnpj.substring(size);
+            let sum = 0;
+            let pos = size - 7;
+
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) {
+                    pos = 9;
+                }
+            }
+            let result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            if (result != digits.charAt(0)) {
+                return false;
+            }
+
+            size = size + 1;
+            numbers = cnpj.substring(0, size);
+            sum = 0;
+            pos = size - 7;
+            for (let i = size; i >= 1; i--) {
+                sum += numbers.charAt(size - i) * pos--;
+                if (pos < 2) {
+                    pos = 9;
+                }
+            }
+            result = sum % 11 < 2 ? 0 : 11 - (sum % 11);
+            if (result != digits.charAt(1)) {
+                return false;
+            }
+
+            return true;
+        }
+
+        function roundValue(number, decimalPlaces) {
+            return number.toFixed(decimalPlaces);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataHoraAtualInput = document.getElementById('dataHoraAtual');
+            dataHoraAtualInput.value = getCurrentDateTime();
+            
+            const cpfInput = document.getElementById('cpf');
+            const cpfValidationMessage = document.getElementById('cpfValidationMessage');
+
+            const cnpjInput = document.getElementById('cnpj');
+            const cnpjValidationMessage = document.getElementById('cnpjValidationMessage');
+
+            cpfInput.addEventListener('blur', function() {
+                const cpfValue = cpfInput.value;
+                if (validateCPF(cpfValue)) {
+                    cpfValidationMessage.textContent = 'CPF válido.';
+                } else {
+                    cpfValidationMessage.textContent = 'CPF inválido.';
+                }
+            });
+
+            cnpjInput.addEventListener('blur', function() {
+                const cnpjValue = cnpjInput.value;
+                if (validateCNPJ(cnpjValue)) {
+                    cnpjValidationMessage.textContent = 'CNPJ válido.';
+                } else {
+                    cnpjValidationMessage.textContent = 'CNPJ inválido.';
+                }
+            });
+
+            const valorInput = document.getElementById('valor');
+
+            valorInput.addEventListener('change', function() {
+                const valor = parseFloat(valorInput.value);
+                const valorArredondado = roundValue(valor, 2); 
+                valorInput.value = valorArredondado;
+            });
+        });
+    </script>
+</body>
+</html>
